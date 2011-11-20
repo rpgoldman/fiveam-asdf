@@ -2,7 +2,7 @@
 
 (defclass fiveam-tester-system (system)
   ((test-names
-    :initarg :otest-names
+    :initarg :test-names
     :reader test-names
     :documentation "An ALIST of symbol and
 package designators, used to indicate which
