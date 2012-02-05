@@ -4,24 +4,46 @@
   ((test-names
     :initarg :test-names
     :reader test-names
-    :documentation "An ALIST of symbol and
-package designators, used to indicate which
-FIVEAM tests should be run when the TEST-OP
-is invoked on this system."
-    ))
-  )
+    :documentation "A list whose elments are either
+cons cells of symbol and package designators or
+simply a symbol designator.
+  In the latter case, the symbols will be interned
+in the package designated by the TEST-PACKAGE slot,
+which must be bound."
+    )
+   (test-package
+    :initarg :default-test-package
+    :documentation "If all the tests are in one
+package, you can just have a list of test names
+in test-names, and get the package name from here."
+  )))
+
+(defmethod test-package ((x fiveam-tester-system))
+  (if (slot-boundp x 'test-package)
+      (slot-value x 'test-package)
+      (error "If package is not specified with each test-name, system's TEST-PACKAGE slot must be set.")))
 
 (defmethod perform ((op test-op) (sys fiveam-tester-system))
   (with-slots (test-names) sys
     (let* ((test-syms
-            (loop for (test-name . package-name) in test-names
-                  for package = (or (find-package package-name)
-                                    (error "Unable to find package ~a" package-name))
-                  for test-sym = (intern
-                                  (etypecase test-name
-                                    (string test-name)
-                                    (symbol (symbol-name test-name)))
-                                  package)
+            (loop for x in test-names
+                  with test-name and package-name and test-sym
+                  if (symbolp x)
+                  do (setf test-name x
+                           package-name (test-package sys))
+                  else
+                     do (assert (and (consp x)
+                                  (or (symbolp (car x)) (stringp (car x)))
+                                  (or (symbolp (cdr x)) (stringp (cdr x)))))
+                        (setf test-name (car x) package-name (cdr x))
+                  do (setf package (or (find-package package-name)
+                                       (error "Unable to find package ~a" package-name)))
+                     (setf test-sym
+                           (intern
+                            (etypecase test-name
+                              (string test-name)
+                              (symbol (symbol-name test-name)))
+                            package))
                   collect test-sym))
            (runner (intern (symbol-name '#:run) :fiveam))
            (tester (intern (symbol-name '#:results-status) :fiveam))
