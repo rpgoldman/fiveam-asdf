@@ -27,7 +27,7 @@ in test-names, and get the package name from here."
   (with-slots (test-names) sys
     (let* ((test-syms
             (loop for x in test-names
-                  with test-name and package-name and test-sym
+                  with test-name and package-name and test-sym and package
                   if (symbolp x)
                   do (setf test-name x
                            package-name (test-package sys))
