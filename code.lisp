@@ -23,13 +23,14 @@ in test-names, and get the package name from here."
     :initarg :failed-asdf-component
     :reader failed-asdf-component
     )
-   (results
-    :initarg :results
-    :reader results
+   (failed
+    :initarg :failed
+    :reader failed
     ))
   (:report (lambda (x s)
-              (format s "Tests on system ~a failed: ~a" (component-name (failed-asdf-component x))
-                      (results x)))))
+              (format s "Tests on system ~a failed: ~{~t~a~%~}"
+                      (component-name (failed-asdf-component x))
+                      (failed x)))))
 
 (defmethod test-package ((x fiveam-tester-system))
   (if (slot-boundp x 'test-package)
@@ -64,8 +65,10 @@ in test-names, and get the package name from here."
            (results (loop for test in test-syms
                           appending (funcall runner test))))
       (funcall explainer results)
-      (unless (funcall tester results)
-        (error 'fiveam-test-fail :failed-asdf-component sys :results results)))))
+      (multiple-value-bind (success failures)
+          (funcall tester results)
+        (unless success
+          (error 'fiveam-test-fail :failed-asdf-component sys :results failures))))))
 
 (defmethod component-depends-on ((op load-op) (sys fiveam-tester-system))
   (cons '(load-op "fiveam") (call-next-method)))
