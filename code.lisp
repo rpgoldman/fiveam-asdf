@@ -68,7 +68,7 @@ in test-names, and get the package name from here."
       (multiple-value-bind (success failures)
           (funcall tester results)
         (unless success
-          (error 'fiveam-test-fail :failed-asdf-component sys :results failures))))))
+          (error 'fiveam-test-fail :failed-asdf-component sys :failed failures))))))
 
 (defmethod component-depends-on ((op load-op) (sys fiveam-tester-system))
   (cons '(load-op "fiveam") (call-next-method)))
