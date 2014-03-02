@@ -29,6 +29,7 @@ that provides functionality for running tests using
 FIVEAM and raising an error if the tests fail
 \(useful for incorporation in a Jenkins or Hudson
 build\)."
+  :depends-on (:asdf)
   :components ((:file "code"))
   :version "1.0"
   )
