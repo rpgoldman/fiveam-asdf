@@ -31,5 +31,5 @@ FIVEAM and raising an error if the tests fail
 build\)."
   :depends-on (:asdf)
   :components ((:file "code"))
-  :version "1.0"
+  :version "2.0"
   )
