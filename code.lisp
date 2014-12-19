@@ -62,11 +62,12 @@ test-op, we will fail if the expected number of checks are not run.")
                       (expected-num-checks x)
                       (actual-num-checks x)))))
 
-(defmethod test-package ((x fiveam-tester-system))
-  (if (slot-boundp x 'test-package)
-      (slot-value x 'test-package)
-      (error "If package is not specified with each test-name, system's TEST-PACKAGE slot must be set.")))
-
+(defgeneric test-package (x)
+  (:method ((x fiveam-tester-system))
+    (if (slot-boundp x 'test-package)
+        (slot-value x 'test-package)
+        (error "If package is not specified with each test-name, system's TEST-PACKAGE slot must be set."))))
+  
 (defmethod perform ((op test-op) (sys fiveam-tester-system))
   (let* ((test-syms
            (loop for x in (test-names sys)
