@@ -12,6 +12,7 @@ in the package designated by the TEST-PACKAGE slot,
 which must be bound.")
    (test-package
     :initarg :default-test-package
+    :initarg :test-package
     :documentation "If all the tests are in one package, you can just
 have a list of test names in test-names, and get the package name from
 here.")
