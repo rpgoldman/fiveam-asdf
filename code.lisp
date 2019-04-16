@@ -71,8 +71,8 @@ test-op, we will fail if the expected number of checks are not run.")
   
 (defmethod perform ((op test-op) (sys fiveam-tester-system))
   (let* ((test-syms
-           (loop for x in (test-names sys)
-                 with test-name and package-name and test-sym and package
+           (loop with test-name and package-name and test-sym and package
+                 for x in (test-names sys)
                  if (symbolp x)
                    do (setf test-name x
                             package-name (test-package sys))
