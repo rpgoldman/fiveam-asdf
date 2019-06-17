@@ -31,7 +31,7 @@ FIVEAM and raising an error if the tests fail
 build\)."
   :depends-on (:asdf)
   :components ((:file "code"))
-  :author "Robert P. Goldman"
+  :author "Robert P. Goldman and John Maraist"
   :version "2.0"
   :license "Lisp LGPL"
   )
