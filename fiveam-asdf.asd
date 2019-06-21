@@ -1,5 +1,5 @@
 ;;;---------------------------------------------------------------------------
-;;; Copyright (c) 2012-2018 Smart Information Flow Technologies, d/b/a SIFT, LLC and
+;;; Copyright (c) 2012-2019 Smart Information Flow Technologies, d/b/a SIFT, LLC and
 ;;; Robert P. Goldman
 ;;; All rights reserved.
 ;;;
@@ -29,6 +29,7 @@ that provides functionality for running tests using
 FIVEAM and raising an error if the tests fail
 \(useful for incorporation in a Jenkins or Hudson
 build\)."
+  :description "Library to integrate FiveAM testing with ASDF TEST-OP and TEST-SYSTEM"
   :depends-on (:asdf)
   :components ((:file "code"))
   :author "Robert P. Goldman and John Maraist"
