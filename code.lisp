@@ -1,4 +1,4 @@
-(in-package :asdf)
+(in-package :asdf-user)
 
 (defclass fiveam-tester-system (system)
   ((test-names
@@ -117,8 +117,4 @@ test-op, we will fail if the expected number of checks are not run.")
   (cons '(load-op "fiveam") (call-next-method)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (export 'fiveam-tester-system :asdf))
-
-
-
-
+  (export 'fiveam-tester-system :asdf-user))
