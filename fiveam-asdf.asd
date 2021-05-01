@@ -18,11 +18,9 @@
 
 (defsystem "fiveam-asdf"
   :long-description
-  "System that defines a new system class FIVEAM-TESTER
-that provides functionality for running tests using
-FIVEAM and raising an error if the tests fail
-\(useful for incorporation in a Jenkins or Hudson
-build\)."
+  "System that defines two new system classes, FIVEAM-TESTER-SYSTEM and PACKAGE-INFERRED-FIVEAM-TESTER-SYSTEM, \
+that provide functionality for running tests using FIVEAM and raising an error if the tests fail \(useful for \
+incorporation in a Jenkins or Hudson build\)."
   :description "Library to integrate FiveAM testing with ASDF TEST-OP and TEST-SYSTEM"
   :depends-on (:asdf)
   :components ((:file "code"))
