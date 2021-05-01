@@ -7,27 +7,31 @@
   ((test-names
     :initarg :test-names
     :reader test-names
-    :documentation "A list whose elments are either
-cons cells of symbol and package designators or
-simply a symbol designator.
-  In the latter case, the symbols will be interned
-in the package designated by the TEST-PACKAGE slot,
-which must be bound.")
+    :documentation "A list of test designators, each of which is either a symbol designator \
+or a cons of (SYMBOL-NAME . PACKAGE-DESIGNATOR).
+
+Bare symbols will be interned in the package designated by the TEST-PACKAGE slot, which must be bound if \
+any are to be interned this way.
+
+The symbol designators, SYMBOL-NAMEs, and PACKAGE-DESIGNATORs may each be any of: a keyword, a string or an \
+uninterned symbol.")
    (test-package
     :initarg :default-test-package
     :initarg :test-package
-    :documentation "If all the tests are in one package, you can just
-have a list of test names in test-names, and get the package name from
-here.")
+    :documentation "A package designator for the TEST-NAMES which don't have explicit packages listed.
+
+If all the tests are in one package, you can just have a list of symbol designators (strings or keywords) in \
+test-names, and get the package name from here.")
    (num-checks
     :initarg :num-checks
     :reader num-checks
     :type (or null (integer 0))
     :initform nil
-    :documentation "How many tests do you expect to run when
-you invoke the test-op on this system. For backwards compatibility,
-this slot is ignored if it's NIL. If bound, then when running the
-test-op, we will fail if the expected number of checks are not run.")))
+    :documentation "Expected number of tests to be run when you invoke test-op on this system.
+
+If supplied and non-NIL, then when running the test-op, we will fail if the actual number of checks run does \
+not match the expected number expected number. See the FiveAM manual for the definition of a check and how \
+they are counted.")))
 
 (defclass package-inferred-fiveam-tester-system (package-inferred-system fiveam-tester-system)
   ())
@@ -36,32 +40,33 @@ test-op, we will fail if the expected number of checks are not run.")))
   ((failed-asdf-component
     :initarg :failed-asdf-component
     :reader failed-asdf-component))
-  (:documentation "Superclass of error conditions that indicate that
-  an ASDF test-op has failed."))
+  (:documentation "Superclass of error conditions that indicate that an ASDF test-op has failed."))
 
 (define-condition fiveam-test-fail (fiveam-asdf-failure)
   ((failed
     :initarg :failed
-    :reader failed))
+    :reader failed
+    :documentation "A list of failed tests"))
   (:report (lambda (x s)
               (format s "Tests on system ~a failed: ~{~t~a~%~}"
                       (component-name (failed-asdf-component x))
-                      (failed x)))))
+                      (failed x))))
+  (:documentation "Thrown when a FiveAM test fails when testing a `fiveam-tester-system'"))
 
 (define-condition fiveam-wrong-number-of-checks (fiveam-asdf-failure)
   ((expected-num-checks
-    :initarg :expected
     :initarg :expected-num-checks
     :reader expected-num-checks)
    (actual-num-checks
     :initarg :actual-num-checks
-    :initarg :actual
     :reader actual-num-checks))
   (:report (lambda (x s)
               (format s "Unexpected number of tests on system ~a: Expected ~d got ~d."
                       (component-name (failed-asdf-component x))
                       (expected-num-checks x)
-                      (actual-num-checks x)))))
+                      (actual-num-checks x))))
+  (:documentation "Thrown when a FiveAM test suite has no failed tests, but the number of checks run does \
+not match the expected number."))
 
 (defgeneric test-package (x)
   (:method ((x fiveam-tester-system))
