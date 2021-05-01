@@ -2,7 +2,8 @@
   (:use #:uiop #:asdf #:cl)
   (:export
    ;; system subclasses
-   #:fiveam-tester-system #:package-inferred-fiveam-tester-system
+   #:fiveam-tester-system #:test-names  #:test-package #:num-checks
+   #:package-inferred-fiveam-tester-system
 
    ;; test failure conditions
    #:fiveam-asdf-test-failure #:failed-asdf-component
@@ -11,7 +12,7 @@
 (in-package #:fiveam-asdf)
 
 (defclass fiveam-tester-system (system)
-  ((test-names
+  ((%test-names
     :initarg :test-names
     :reader test-names
     :documentation "A list of test designators, each of which is either a symbol designator
@@ -22,7 +23,7 @@ any are to be interned this way.
 
 The symbol designators, SYMBOL-NAMEs, and PACKAGE-DESIGNATORs may each be any of: a keyword, a string or an
 uninterned symbol.")
-   (test-package
+   (%test-package
     :initarg :default-test-package
     :initarg :test-package
     :reader test-package
@@ -30,7 +31,7 @@ uninterned symbol.")
 
 If all the tests are in one package, you can just have a list of symbol designators (strings or keywords) in
 test-names, and get the package name from here.")
-   (num-checks
+   (%num-checks
     :initarg :num-checks
     :reader num-checks
     :type (or null (integer 0))
@@ -45,13 +46,13 @@ they are counted.")))
   ())
 
 (define-condition fiveam-asdf-failure (error)
-  ((failed-asdf-component
+  ((%failed-asdf-component
     :initarg :failed-asdf-component
     :reader failed-asdf-component))
   (:documentation "Superclass of error conditions that indicate that an ASDF test-op has failed."))
 
 (define-condition fiveam-test-fail (fiveam-asdf-failure)
-  ((failed
+  ((%failed
     :initarg :failed
     :reader failed
     :documentation "A list of failed tests"))
@@ -62,10 +63,10 @@ they are counted.")))
   (:documentation "Thrown when a FiveAM test fails when testing a `fiveam-tester-system'"))
 
 (define-condition fiveam-wrong-number-of-checks (fiveam-asdf-failure)
-  ((expected-num-checks
+  ((%expected-num-checks
     :initarg :expected-num-checks
     :reader expected-num-checks)
-   (actual-num-checks
+   (%actual-num-checks
     :initarg :actual-num-checks
     :reader actual-num-checks))
   (:report (lambda (x s)
