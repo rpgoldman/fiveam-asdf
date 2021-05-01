@@ -24,23 +24,19 @@ here.")
     :documentation "How many tests do you expect to run when
 you invoke the test-op on this system. For backwards compatibility,
 this slot is ignored if it's NIL. If bound, then when running the
-test-op, we will fail if the expected number of checks are not run.")
-   ))
+test-op, we will fail if the expected number of checks are not run.")))
 
 (define-condition fiveam-asdf-failure (error)
   ((failed-asdf-component
     :initarg :failed-asdf-component
-    :reader failed-asdf-component
-    ))
+    :reader failed-asdf-component))
   (:documentation "Superclass of error conditions that indicate that
   an ASDF test-op has failed."))
-
 
 (define-condition fiveam-test-fail (fiveam-asdf-failure)
   ((failed
     :initarg :failed
-    :reader failed
-    ))
+    :reader failed))
   (:report (lambda (x s)
               (format s "Tests on system ~a failed: ~{~t~a~%~}"
                       (component-name (failed-asdf-component x))
@@ -50,13 +46,11 @@ test-op, we will fail if the expected number of checks are not run.")
   ((expected-num-checks
     :initarg :expected
     :initarg :expected-num-checks
-    :reader expected-num-checks
-    )
+    :reader expected-num-checks)
    (actual-num-checks
     :initarg :actual-num-checks
     :initarg :actual
-    :reader actual-num-checks
-    ))
+    :reader actual-num-checks))
   (:report (lambda (x s)
               (format s "Unexpected number of tests on system ~a: Expected ~d got ~d."
                       (component-name (failed-asdf-component x))
@@ -118,7 +112,3 @@ test-op, we will fail if the expected number of checks are not run.")
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (export 'fiveam-tester-system :asdf))
-
-
-
-

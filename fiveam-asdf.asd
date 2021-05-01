@@ -1,6 +1,6 @@
 ;;;---------------------------------------------------------------------------
-;;; Copyright (c) 2012-2019 Smart Information Flow Technologies, d/b/a SIFT, LLC and
-;;; Robert P. Goldman
+;;; Copyright (c) 2012-2021 Smart Information Flow Technologies, d/b/a SIFT,
+;;; LLC and Robert P. Goldman, John Marist, and Phoebe Goldman
 ;;; All rights reserved.
 ;;;
 ;;; The developers make this software available according to the terms of the
@@ -17,8 +17,7 @@
 ;;;---------------------------------------------------------------------------
 
 (defpackage :fiveam-asdf-asd
-  (:use :common-lisp :asdf)
-  )
+  (:use :common-lisp :asdf))
 
 (in-package :fiveam-asdf-asd)
 
@@ -33,6 +32,5 @@ build\)."
   :depends-on (:asdf)
   :components ((:file "code"))
   :author "Robert P. Goldman and John Maraist"
-  :version "2.0"
-  :license "Lisp LGPL"
-  )
+  :version "3.0"
+  :license "Lisp LGPL")
