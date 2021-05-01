@@ -1,26 +1,33 @@
 (uiop:define-package #:fiveam-asdf
   (:use #:uiop #:asdf #:cl)
-  (:export #:fiveam-tester-system #:package-inferred-fiveam-tester-system))
+  (:export
+   ;; system subclasses
+   #:fiveam-tester-system #:package-inferred-fiveam-tester-system
+
+   ;; test failure conditions
+   #:fiveam-asdf-test-failure #:failed-asdf-component
+   #:fiveam-test-fail #:failed
+   #:fiveam-wrong-number-of-checks #:actual-num-checks #:expected-num-checks))
 (in-package #:fiveam-asdf)
 
 (defclass fiveam-tester-system (system)
   ((test-names
     :initarg :test-names
     :reader test-names
-    :documentation "A list of test designators, each of which is either a symbol designator \
+    :documentation "A list of test designators, each of which is either a symbol designator
 or a cons of (SYMBOL-NAME . PACKAGE-DESIGNATOR).
 
-Bare symbols will be interned in the package designated by the TEST-PACKAGE slot, which must be bound if \
+Bare symbols will be interned in the package designated by the TEST-PACKAGE slot, which must be bound if
 any are to be interned this way.
 
-The symbol designators, SYMBOL-NAMEs, and PACKAGE-DESIGNATORs may each be any of: a keyword, a string or an \
+The symbol designators, SYMBOL-NAMEs, and PACKAGE-DESIGNATORs may each be any of: a keyword, a string or an
 uninterned symbol.")
    (test-package
     :initarg :default-test-package
     :initarg :test-package
     :documentation "A package designator for the TEST-NAMES which don't have explicit packages listed.
 
-If all the tests are in one package, you can just have a list of symbol designators (strings or keywords) in \
+If all the tests are in one package, you can just have a list of symbol designators (strings or keywords) in
 test-names, and get the package name from here.")
    (num-checks
     :initarg :num-checks
@@ -29,8 +36,8 @@ test-names, and get the package name from here.")
     :initform nil
     :documentation "Expected number of tests to be run when you invoke test-op on this system.
 
-If supplied and non-NIL, then when running the test-op, we will fail if the actual number of checks run does \
-not match the expected number expected number. See the FiveAM manual for the definition of a check and how \
+If supplied and non-NIL, then when running the test-op, we will fail if the actual number of checks run does
+not match the expected number expected number. See the FiveAM manual for the definition of a check and how
 they are counted.")))
 
 (defclass package-inferred-fiveam-tester-system (package-inferred-system fiveam-tester-system)
@@ -65,7 +72,7 @@ they are counted.")))
                       (component-name (failed-asdf-component x))
                       (expected-num-checks x)
                       (actual-num-checks x))))
-  (:documentation "Thrown when a FiveAM test suite has no failed tests, but the number of checks run does \
+  (:documentation "Thrown when a FiveAM test suite has no failed tests, but the number of checks run does
 not match the expected number."))
 
 (defgeneric test-package (x)
