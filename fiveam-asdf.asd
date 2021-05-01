@@ -16,13 +16,7 @@
 ;;;
 ;;;---------------------------------------------------------------------------
 
-(defpackage :fiveam-asdf-asd
-  (:use :common-lisp :asdf)
-  )
-
-(in-package :fiveam-asdf-asd)
-
-(defsystem fiveam-asdf
+(defsystem "fiveam-asdf"
   :long-description
   "System that defines a new system class FIVEAM-TESTER
 that provides functionality for running tests using
@@ -33,6 +27,5 @@ build\)."
   :depends-on (:asdf)
   :components ((:file "code"))
   :author "Robert P. Goldman and John Maraist"
-  :version "2.0"
-  :license "Lisp LGPL"
-  )
+  :version "3.0"
+  :license "Lisp LGPL")
