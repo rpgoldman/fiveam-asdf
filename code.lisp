@@ -26,6 +26,9 @@ you invoke the test-op on this system. For backwards compatibility,
 this slot is ignored if it's NIL. If bound, then when running the
 test-op, we will fail if the expected number of checks are not run.")))
 
+(defclass package-inferred-fiveam-tester-system (package-inferred-system fiveam-tester-system)
+  ())
+
 (define-condition fiveam-asdf-failure (error)
   ((failed-asdf-component
     :initarg :failed-asdf-component
@@ -111,4 +114,5 @@ test-op, we will fail if the expected number of checks are not run.")))
   (cons '(load-op "fiveam") (call-next-method)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (export 'fiveam-tester-system :asdf))
+  (export 'fiveam-tester-system :asdf)
+  (export 'package-inferred-fiveam-tester-system :asdf))
