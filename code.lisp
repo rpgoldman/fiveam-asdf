@@ -1,4 +1,7 @@
-(in-package :asdf)
+(uiop:define-package #:fiveam-asdf
+  (:use #:uiop #:asdf #:cl)
+  (:export #:fiveam-tester-system #:package-inferred-fiveam-tester-system))
+(in-package #:fiveam-asdf)
 
 (defclass fiveam-tester-system (system)
   ((test-names
@@ -130,5 +133,7 @@ test-op, we will fail if the expected number of checks are not run.")))
   (cons '(load-op "fiveam") (call-next-method)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (export 'fiveam-tester-system :asdf)
-  (export 'package-inferred-fiveam-tester-system :asdf))
+  (import '(fiveam-tester-system package-inferred-fiveam-tester-system)
+          '#:asdf)
+  (export '(fiveam-tester-system package-inferred-fiveam-tester-system)
+          '#:asdf))
