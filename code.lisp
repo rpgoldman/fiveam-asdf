@@ -65,47 +65,63 @@ test-op, we will fail if the expected number of checks are not run.")))
     (if (slot-boundp x 'test-package)
         (slot-value x 'test-package)
         (error "If package is not specified with each test-name, system's TEST-PACKAGE slot must be set."))))
-  
+
+(defun test-designator-name (test-designator)
+  (etypecase test-designator
+    (symbol (symbol-name test-designator))
+    (string test-designator)
+    (cons (test-designator-name (car test-designator)))))
+
+(defun test-designator-package (test-designator tester-system)
+  (etypecase test-designator
+    ((or symbol string) (test-package tester-system))
+    (cons (or (find-package (cdr test-designator))
+              (error "Unable to find package ~a" (cdr test-designator))))))
+
+(defun test-designator-symbol (test-designator tester-system)
+  (intern (test-designator-name test-designator)
+          (test-designator-package test-designator tester-system)))
+
+(defun test-syms (tester-system)
+  (loop for test-designator in (test-names tester-system)
+        collect (test-designator-symbol test-designator tester-system)))
+
+(defun run-tests (tester-system)
+  (loop with runner = (intern (symbol-name '#:run) '#:fiveam)
+        for test in (test-syms tester-system)
+        appending (funcall runner test)))
+
+(defun explain-results (results)
+  (funcall (intern (symbol-name '#:run) '#:fiveam)
+           results))
+
+(defun verify-num-checks (results tester-system)
+  "Throw an error if TESTER-SYSTEM specifies aan expected number of checks to which RESULTS does not conform."
+  (if-let ((expected (num-checks tester-system))
+           (actual (length results)))
+    (unless (= actual expected)
+      (error 'fiveam-wrong-number-of-checks
+             :failed-asdf-component tester-system
+             :actual-num-checks actual
+             :expected-num-checks expected))))
+
+(defun results-status (results)
+  "Returns (values SUCCESSP FAILED-CHECKS)"
+  (funcall (intern (symbol-name '#:results-status) '#:fiveam)
+           results))
+
+(defun verify-success (results tester-system)
+  (multiple-value-bind (success failures) (results-status results)
+    (unless success
+      (error 'fiveam-test-fail
+             :failed-asdf-component tester-system
+             :failed failures))))
+
 (defmethod perform ((op test-op) (sys fiveam-tester-system))
-  (let* ((test-syms
-           (loop with test-name and package-name and test-sym and package
-                 for x in (test-names sys)
-                 if (symbolp x)
-                   do (setf test-name x
-                            package-name (test-package sys))
-                 else
-                   do (assert (and (consp x)
-                                   (or (symbolp (car x)) (stringp (car x)))
-                                   (or (symbolp (cdr x)) (stringp (cdr x)))))
-                      (setf test-name (car x) package-name (cdr x))
-                 do (setf package (or (find-package package-name)
-                                      (error "Unable to find package ~a" package-name)))
-                    (setf test-sym
-                          (intern
-                           (etypecase test-name
-                             (string test-name)
-                             (symbol (symbol-name test-name)))
-                           package))
-                 collect test-sym))
-         (runner (intern (symbol-name '#:run) :fiveam))
-         (tester (intern (symbol-name '#:results-status) :fiveam))
-         (explainer (intern (symbol-name '#:explain!) :fiveam))
-         (results (loop for test in test-syms
-                        appending (funcall runner test))))
-    (funcall explainer results)
-    ;; if there's an expected number of checks, verify that we have run
-    ;; exactly that number.
-    (when (num-checks sys)
-      (let ((actual-num-checks (length results)))
-        (unless (= actual-num-checks (num-checks sys))
-          (error 'fiveam-wrong-number-of-checks
-                 :failed-asdf-component sys
-                 :actual actual-num-checks
-                 :expected (num-checks sys)))))
-    (multiple-value-bind (success failures)
-        (funcall tester results)
-      (unless success
-        (error 'fiveam-test-fail :failed-asdf-component sys :failed failures)))))
+  (let* ((results (run-tests sys)))
+    (explain-results results)
+    (verify-num-checks results sys)
+    (verify-success results sys)))
 
 (defmethod component-depends-on ((op load-op) (sys fiveam-tester-system))
   (cons '(load-op "fiveam") (call-next-method)))
