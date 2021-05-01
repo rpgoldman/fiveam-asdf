@@ -1,6 +1,13 @@
 (uiop:define-package #:fiveam-asdf
   (:use #:uiop #:asdf #:cl)
-  (:export #:fiveam-tester-system #:package-inferred-fiveam-tester-system))
+  (:export
+   ;; system subclasses
+   #:fiveam-tester-system #:package-inferred-fiveam-tester-system
+
+   ;; test failure conditions
+   #:fiveam-asdf-test-failure #:failed-asdf-component
+   #:fiveam-test-fail #:failed
+   #:fiveam-wrong-number-of-checks #:actual-num-checks #:expected-num-checks))
 (in-package #:fiveam-asdf)
 
 (defclass fiveam-tester-system (system)
