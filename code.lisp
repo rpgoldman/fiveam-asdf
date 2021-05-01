@@ -25,6 +25,7 @@ uninterned symbol.")
    (test-package
     :initarg :default-test-package
     :initarg :test-package
+    :reader test-package
     :documentation "A package designator for the TEST-NAMES which don't have explicit packages listed.
 
 If all the tests are in one package, you can just have a list of symbol designators (strings or keywords) in \
@@ -74,12 +75,6 @@ they are counted.")))
                       (actual-num-checks x))))
   (:documentation "Thrown when a FiveAM test suite has no failed tests, but the number of checks run does \
 not match the expected number."))
-
-(defgeneric test-package (x)
-  (:method ((x fiveam-tester-system))
-    (if (slot-boundp x 'test-package)
-        (slot-value x 'test-package)
-        (error "If package is not specified with each test-name, system's TEST-PACKAGE slot must be set."))))
 
 (defun test-designator-name (test-designator)
   (etypecase test-designator
