@@ -23,12 +23,12 @@
 
 (defsystem fiveam-asdf
   :long-description
-  "Defines two new system classes, FIVEAM-TESTER-SYSTEM and PACKAGE-INFERRED-FIVEAM-TESTER-SYSTEM, 
-that provide functionality for running tests using FIVEAM and raising an error if the tests fail \(useful for 
+  "Defines two new system classes, FIVEAM-TESTER-SYSTEM and PACKAGE-INFERRED-FIVEAM-TESTER-SYSTEM,
+that provide functionality for running tests using FIVEAM and raising an error if the tests fail \(useful for
 incorporation in a CI system such as Jenkins, GitHub actions, etc.\)."
   :description "Integrate FiveAM testing with ASDF TEST-OP and TEST-SYSTEM"
   :depends-on (:asdf)
   :components ((:file "code"))
-  :author "Robert P. Goldman and John Maraist"
+  :author "Phoebe Goldman, Robert P. Goldman and John Maraist"
   :version "3.0"
   :license "Lisp LGPL")
