@@ -103,7 +103,7 @@ not match the expected number."))
         appending (funcall runner test)))
 
 (defun explain-results (results)
-  (funcall (intern (symbol-name '#:run) '#:fiveam)
+  (funcall (intern (symbol-name '#:explain!) '#:fiveam)
            results))
 
 (defun verify-num-checks (results tester-system)
