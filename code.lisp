@@ -39,7 +39,7 @@ test-names, and get the package name from here.")
     :documentation "Expected number of tests to be run when you invoke test-op on this system.
 
 If supplied and non-NIL, then when running the test-op, we will fail if the actual number of checks run does
-not match the expected number expected number. See the FiveAM manual for the definition of a check and how
+not match the expected number. See the FiveAM manual for the definition of a check and how
 they are counted.")))
 
 (defclass package-inferred-fiveam-tester-system (package-inferred-system fiveam-tester-system)
@@ -107,7 +107,7 @@ not match the expected number."))
            results))
 
 (defun verify-num-checks (results tester-system)
-  "Throw an error if TESTER-SYSTEM specifies aan expected number of checks to which RESULTS does not conform."
+  "Throw an error if TESTER-SYSTEM specifies an expected number of checks to which RESULTS does not conform."
   (if-let ((expected (num-checks tester-system))
            (actual (length results)))
     (unless (= actual expected)
