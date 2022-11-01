@@ -22,7 +22,7 @@ system, `foo`, it is usually best to create a subsystem like this:
     (defsystem "foo/test"
       :defsystem-depends-on ("fiveam-asdf")
       :depends-on ("fiveam" "foo" ...)
-      :class fiveam-tester
+      :class fiveam-tester-system
       ....)
 
 Having the tests in this ancillary subsystem avoids the need for your main system to
