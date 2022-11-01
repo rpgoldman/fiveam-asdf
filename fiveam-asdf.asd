@@ -30,5 +30,5 @@ incorporation in a CI system such as Jenkins, GitHub actions, etc.\)."
   :depends-on (:asdf)
   :components ((:file "code"))
   :author "Phoebe Goldman, Robert P. Goldman and John Maraist"
-  :version "3.0.1"
+  :version "3.0.2"
   :license "Lisp LGPL")
